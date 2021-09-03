@@ -9,15 +9,30 @@ jobs:
   BuildImages:
     name: "Build container images"
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        oscode:
+          - el7
+          - el8
+    permissions:
+      contents: read
+      packages: write
 
     steps:
-    - name: Checkout Source
-      uses: actions/checkout@v2
+      - name: Checkout Source
+        uses: actions/checkout@v2
 
-    - name: Docker version
-      run: docker --version
-
-    - name: Build Image Files
-      run: |
-        chmod +x 
-
+      - name: Log in to GHCR
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Build and Push for ${{ matrix.oscode }}
+        uses: docker/build-push-action@v2
+        with:
+          context: ./${{ matrix.oscode }}/
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/cem_litmusimages:${{ matrix.oscode }}
