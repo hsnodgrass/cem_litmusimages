@@ -1,0 +1,15 @@
+---
+FROM: "litmusimage/centos:7 AS baseimage"
+ENTRYPOINT:
+  - "/bin/bash"
+package_install:
+  command: "yum -y install"
+service_enable:
+  command: "systemctl enable --now"
+  startup_script: "/etc/rc.d/rc.local"
+  
+body:
+  - RUN: 'useradd testuser1; echo -e "changeme\nchangeme" | (passwd --stdin testuser1)'
+  - package_install:
+    - which
+    - NetworkManager

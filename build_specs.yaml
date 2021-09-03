@@ -1,0 +1,100 @@
+---
+operating_systems:
+  el7:
+    base_image: "litmusimage/centos:7"
+    package_install: "yum -y install"
+    service_enable: "systemctl enable --now"
+    entry_point: "/bin/bash"
+  el8:
+    base_image: "litmusimage/centos:8"
+    package_install: "dnf -y install"
+    service_enable: "systemctl enable --now"
+    entry_point: "/bin/bash"
+packages:
+  which:
+    install_on:
+      - el7
+      - el8
+  NetworkManager:
+    install_on:
+      - el7
+      - el8
+    service_enable: true
+  nfs-utils:
+    install_on:
+      - el8
+    service_enable: true
+    service_name: nfs-server
+  ypserv:
+    install_on:
+      - el8
+    service_enable: true
+  postfix:
+    install_on:
+      - el8
+    service_enable: true
+  cups:
+    install_on:
+      - el8
+    service_enable: true
+  iptables-services:
+    install_on:
+      - el8
+    service_enable: true
+    service_name: iptables
+  httpd:
+    install_on:
+      - el8
+    service_enable: true
+  dovecot:
+    install_on:
+      - el8
+    service_enable: true
+  vsftpd:
+    install_on:
+      - el8
+    service_enable: true
+  samba:
+    install_on:
+      - el8
+    service_enable: true
+    service_name: smb
+  net-snmp:
+    install_on:
+      - el8
+    service_enable: true
+    service_name: snmpd
+  crypto-policies:
+    install_on:
+      - el8
+  xorg-x11-server-Xorg:
+    install_on:
+      - el8
+  rsync-daemon:
+    install_on:
+      - el8
+    service_enable: true
+    service_name: rsyncd
+  avahi:
+    install_on:
+      - el8
+    service_enable: true
+    service_name: avahi-daemon
+  passwd:
+    install_on:
+      - el8
+commands:
+  - cmd: "sed -i 's/inet_interfaces = localhost/inet_interfaces = all/' /etc/postfix/main.cf"
+    run_on:
+      - el8
+    when: before_service_enable
+  - cmd: "update-crypto-policies --set LEGACY && update-crypto-policies"
+    run_on:
+      - el8
+  - cmd: "echo CRYPTO_POLICY= >> /etc/sysconfig/sshd"
+    run_on:
+      - el8
+  - cmd: 'useradd testuser1; echo -e "changeme\nchangeme" | (passwd --stdin testuser1)'
+    run_on:
+      - el7
+      - el8
