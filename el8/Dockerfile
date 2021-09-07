@@ -5,6 +5,7 @@ ENV container docker
 EXPOSE 22
 VOLUME /run /tmp
 STOPSIGNAL SIGRTMIN+3
+CMD "/usr/sbin/init"
 RUN echo "LC_ALL=en_US.utf-8" >> /etc/locale.conf && \
     rpm -U https://yum.puppet.com/puppet7-release-el-8.noarch.rpm && \
     yum install -y puppet-agent \
