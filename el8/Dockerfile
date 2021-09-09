@@ -23,10 +23,10 @@ RUN echo "LC_ALL=en_US.utf-8" >> /etc/locale.conf && \
                    glibc-langpack-en && \
     ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N "" && \
     ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N "" && \
-    sed -ri \"s/^#?PermitRootLogin .*/PermitRootLogin yes/\" /etc/ssh/sshd_config && \
-    sed -ri \"s/^#?PasswordAuthentication .*/PasswordAuthentication yes/\" /etc/ssh/sshd_config && \
-    sed -ri \"s/^#?UseDNS .*/UseDNS no/\" /etc/ssh/sshd_config && \
-    sed -e \"/HostKey.*ssh_host_e.*_key/ s/^#*/#/\" -ri /etc/ssh/sshd_config && \
+    sed -ri "s/^#?PermitRootLogin .*/PermitRootLogin yes/" /etc/ssh/sshd_config && \
+    sed -ri "s/^#?PasswordAuthentication .*/PasswordAuthentication yes/" /etc/ssh/sshd_config && \
+    sed -ri "s/^#?UseDNS .*/UseDNS no/" /etc/ssh/sshd_config && \
+    sed -e "/HostKey.*ssh_host_e.*_key/ s/^#*/#/" -ri /etc/ssh/sshd_config && \
     mkdir -p /var/run/sshd && \
     echo root:root | /usr/sbin/chpasswd && \
     systemctl enable sshd.service
