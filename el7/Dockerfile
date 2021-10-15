@@ -1,7 +1,7 @@
 FROM litmusimage/centos:7 AS builder
 ARG collection=puppet7
 ARG testuser1pw=changeme
-LABEL org.opencontainers.image.source https://github.com/hsnodgrass/cme_litmusimages
+LABEL org.opencontainers.image.source https://github.com/hsnodgrass/cem_litmusimages
 LABEL com.puppetlabs.litmus.os-release.name CentOS Linux
 LABEL com.puppetlabs.litmus.os-release.version 7
 LABEL com.puppetlabs.litmus.os-release.id centos
@@ -35,6 +35,7 @@ RUN echo "LC_ALL=en_US.utf-8" >> /etc/locale.conf && \
 FROM builder
 # Modify below
 RUN yum install -y which \
-                   NetworkManager
+                   NetworkManager \
+                   firewalld
 RUN useradd testuser1 && \
     echo -e "${testuser1pw}\n${testuser1pw}" | (passwd --stdin testuser1)
