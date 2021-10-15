@@ -1,7 +1,7 @@
 FROM litmusimage/centos:8 AS builder
 ARG collection=puppet7
 ARG testuser1pw=changeme
-LABEL org.opencontainers.image.source https://github.com/hsnodgrass/cme_litmusimages
+LABEL org.opencontainers.image.source https://github.com/hsnodgrass/cem_litmusimages
 LABEL com.puppetlabs.litmus.os-release.name CentOS Linux
 LABEL com.puppetlabs.litmus.os-release.version 8
 LABEL com.puppetlabs.litmus.os-release.id centos
@@ -49,7 +49,8 @@ RUN dnf install -y which \
                    xorg-x11-server-Xorg \
                    rsync-daemon \
                    avahi \
-                   passwd && \
+                   passwd \
+                   firewalld && \
     systemctl enable NetworkManager \
                      ypserv \
                      postfix \
