@@ -14,6 +14,9 @@ jobs:
         oscode:
           - el7
           - el8
+        collection:
+          - puppet6
+          - puppet7
     permissions:
       contents: read
       packages: write
@@ -29,10 +32,22 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Build and Push for ${{ matrix.oscode }}
+      - name: Build and Push for ${{ matrix.oscode }} - ${{matrix.collection}} - firewalld
         uses: docker/build-push-action@v2
         with:
+          build-args: |
+            collection=${{matrix.collection}},firewallpkg=firewalld,firewallsvc=firewalld
           context: ./${{ matrix.oscode }}/
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/cem_litmusimages:${{ matrix.oscode }}
+            ghcr.io/${{ github.repository_owner }}/cem_litmusimages:${{ matrix.oscode }}-${{matrix.collection}}-firewalld
+
+      - name: Build and Push for ${{ matrix.oscode }} - iptables
+        uses: docker/build-push-action@v2
+        with:
+          build-args: |
+            collection=${{matrix.collection}},firewallpkg=iptables-services,firewallsvc=iptables
+          context: ./${{ matrix.oscode }}/
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/cem_litmusimages:${{ matrix.oscode }}-${{matrix.collection}}-iptables

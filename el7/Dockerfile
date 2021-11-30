@@ -1,5 +1,7 @@
 FROM litmusimage/centos:7 AS builder
 ARG collection=puppet7
+ARG firewallpkg=firewalld
+ARG firewallsvc=firewalld
 ARG testuser1pw=changeme
 LABEL org.opencontainers.image.source https://github.com/hsnodgrass/cem_litmusimages
 LABEL com.puppetlabs.litmus.os-release.name CentOS Linux
@@ -20,7 +22,8 @@ RUN echo "LC_ALL=en_US.utf-8" >> /etc/locale.conf && \
                    openssh-server \
                    openssh-clients \
                    initscripts \
-                   glibc-langpack-en && \
+                   glibc-langpack-en \
+                   ${firewallpkg} && \
     ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N "" && \
     ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key -N "" && \
     sed -ri "s/^#?PermitRootLogin .*/PermitRootLogin yes/" /etc/ssh/sshd_config && \
@@ -35,7 +38,8 @@ RUN echo "LC_ALL=en_US.utf-8" >> /etc/locale.conf && \
 FROM builder
 # Modify below
 RUN yum install -y which \
-                   NetworkManager \
-                   firewalld
+                   NetworkManager && \
+    systemctl enable NetworkManager \
+                     ${firewallsvc}
 RUN useradd testuser1 && \
     echo -e "${testuser1pw}\n${testuser1pw}" | (passwd --stdin testuser1)
