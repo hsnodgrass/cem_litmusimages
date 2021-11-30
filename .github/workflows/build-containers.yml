@@ -36,7 +36,9 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           build-args: |
-            collection=${{matrix.collection}},firewallpkg=firewalld,firewallsvc=firewalld
+            collection=${{matrix.collection}}
+            firewallpkg=firewalld
+            firewallsvc=firewalld
           context: ./${{ matrix.oscode }}/
           push: true
           tags: |
@@ -46,7 +48,9 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           build-args: |
-            collection=${{matrix.collection}},firewallpkg=iptables-services,firewallsvc=iptables
+            collection=${{matrix.collection}}
+            firewallpkg=iptables-services
+            firewallsvc=iptables
           context: ./${{ matrix.oscode }}/
           push: true
           tags: |
