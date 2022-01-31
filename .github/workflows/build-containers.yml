@@ -44,7 +44,7 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository_owner }}/cem_litmusimages:${{ matrix.oscode }}-${{matrix.collection}}-firewalld
 
-      - name: Build and Push for ${{ matrix.oscode }} - iptables
+      - name: Build and Push for ${{ matrix.oscode }} - ${{matrix.collection}} - iptables
         uses: docker/build-push-action@v2
         with:
           build-args: |

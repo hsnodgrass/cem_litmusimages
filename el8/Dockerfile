@@ -1,4 +1,4 @@
-FROM litmusimage/centos:8 AS builder
+FROM almalinux:8.5 AS builder
 ARG collection=puppet7
 ARG firewallpkg=firewalld
 ARG firewallsvc=firewalld
@@ -18,7 +18,7 @@ STOPSIGNAL SIGRTMIN+3
 CMD "/usr/sbin/init"
 RUN echo "LC_ALL=en_US.utf-8" >> /etc/locale.conf && \
     rpm -U https://yum.puppet.com/${collection}-release-el-8.noarch.rpm && \
-    yum install -y puppet-agent \
+    dnf install -y puppet-agent \
                    openssh-server \
                    openssh-clients \
                    initscripts \
